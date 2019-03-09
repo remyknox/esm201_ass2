@@ -1,0 +1,10 @@
+---
+title: "esm201_ass2"
+author: "Jeremy Knox"
+date: "3/9/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```

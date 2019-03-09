@@ -6,5 +6,49 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo=TRUE, 
+                      cache=FALSE, 
+                      fig.width=5, 
+                      fig.height=5,
+                      fig.align='center')
+indent1 = '    '      
+indent2 = paste(rep(indent1, 2), collapse='')
+
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(stargazer)
+library(latex2exp)
+library(finalfit)
+
+fert = read_csv("fertilizer.csv")
+grain = read_csv("grain.csv")
+
 ```
+
+
+## 1. Patterns in yield over time  
+
+# a. Plot of yield vs. time by grain 
+```{r error=FALSE, echo=FALSE}
+
+grains_plot = ggplot(data = grain, aes(x=year, y=yield)) +
+  geom_point() +
+  facet_wrap(~commodity, scales = "free") +
+  theme_classic() +
+  xlab(TeX('Year')) +
+  ylab(TeX('Grain Yield (bushels $acre^{-1}$) ')) 
+grains_plot
+
+```
+**Figure 1 | Four plots showing grain yeild over time by commodity.** Grain yeild is measured in bushels per acre. Barley and Corn look to have a linear low plateau for yield over time with  positive slope starting in the 1940s. Oats and Sorghum look to have a linear piecewise relationship for yiled over time with an increasing rate starting in the 1950s and 1960s, respectivley.
+
+Barley and Corn yield over time, seen in *Figure 1*, could be described by a linear low plateau model. For example, let $x =$ year and $y =$ Grain Yield (bushels   acre$^{-1}$). Then for Barley we have:
+$$ 
+\begin{cases} 
+      y_0 \approx 25 & x\leq 1950 \\
+      \ y \ \approx y_0 + \frac{4}{5}x & x > 1950 
+   \end{cases}
+$$

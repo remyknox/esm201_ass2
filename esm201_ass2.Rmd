@@ -1,5 +1,5 @@
 ---
-title: "esm201_ass2"
+title: "ESM 201 - Assignment 2"
 author: "Jeremy Knox"
 date: "3/9/2019"
 output: pdf_document
@@ -31,11 +31,11 @@ grain = read_csv("grain.csv")
 
 ## 1. Patterns in yield over time  
 
-# a. Plot of yield vs. time by grain 
-```{r error=FALSE, echo=FALSE}
+# a. Plot of yield over time by crop 
+```{r error=FALSE, echo=FALSE, warning=FALSE}
 
 grains_plot = ggplot(data = grain, aes(x=year, y=yield)) +
-  geom_point() +
+  geom_point(size = .5) +
   facet_wrap(~commodity, scales = "free") +
   theme_classic() +
   xlab(TeX('Year')) +
@@ -43,12 +43,48 @@ grains_plot = ggplot(data = grain, aes(x=year, y=yield)) +
 grains_plot
 
 ```
-**Figure 1 | Four plots showing grain yeild over time by commodity.** Grain yeild is measured in bushels per acre. Barley and Corn look to have a linear low plateau for yield over time with  positive slope starting in the 1940s. Oats and Sorghum look to have a linear piecewise relationship for yiled over time with an increasing rate starting in the 1950s and 1960s, respectivley.
+**Figure 1 | Four plots showing grain yeild over time by crop** Grain yeild is measured in bushels per acre. Barley, Corn and Oats look to have a linear low plateau for yield over time with  positive slope starting in the 1940s. Sorghum looks to have a linear piecewise relationship for yiled over time with an increasing rate starting in the 1950s but then decreasing rate starting in the 1970s.  
 
-Barley and Corn yield over time, seen in *Figure 1*, could be described by a linear low plateau model. For example, let $x =$ year and $y =$ Grain Yield (bushels   acre$^{-1}$). Then for Barley we have:
+
+# b. Statistical models to decribe Figure 1
+Barley, Corn and Oats yield over time, seen in *Figure 1*, could be described by a linear low plateau model. For example, let $x =$ year and $f(x) =$ Grain Yield (bushels   acre$^{-1}$). Then for Barley we have:
 $$ 
+f(x) \approx
 \begin{cases} 
-      y_0 \approx 25 & x\leq 1950 \\
-      \ y \ \approx y_0 + \frac{4}{5}x & x > 1950 
+      25 & x\leq 1950 \\
+      25 + \frac{4}{5}x & x > 1950 
    \end{cases}
 $$
+For Corn yield, the slope would be steeper when $x>1950$ at approximately $2x$. The slope for Oats yield when $x>1950$ looks to be approximately $\frac{3}{5}x$. Sorghum shows a different trend that follows a linear piecewise relationship described by the following:
+$$
+f(x) \approx
+\begin{cases}
+    15 + \frac{1}{5}x & 1925 \leq x \leq 1950 \\
+    20 + \frac{6}{5}x & 1950 < x \leq 1975 \\
+    50 + \frac{3}{5}x & 1975 < x 
+  \end{cases}
+$$
+
+
+## 2. Fertilizer use
+
+# a. Plot of fetilizer use over time by crop
+```{r echo=FALSE, warning=FALSE, error=FALSE, fig.width=8}
+
+fert_plot = ggplot(data = fert, aes(x=year, y=ppa)) +
+  geom_point(aes(colour = fertilizer), size=.5) +
+  facet_wrap(~crop) +
+  theme_classic() +
+  xlab(TeX('Year')) +
+  ylab(TeX('Fertilizer Use (pounds acre$^{-1}$)')) +
+  labs(colour = "Fertilizer")
+fert_plot
+
+```
+**Figure 2 | Three plots showing pounds of fertilizer over time by crop.** 
+
+
+
+
+
+

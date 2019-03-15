@@ -45,7 +45,7 @@ grains_plot = ggplot(data = grain, aes(x=year, y=yield)) +
 grains_plot
 
 ```
-**Figure 1 | Four plots showing grain yeild over time by crop** Grain yeild is measured in bushels per acre. Barley, Corn and Oats look to have a linear low plateau for yield over time with  positive slope starting in the 1940s. Sorghum looks to have a linear piecewise relationship for yiled over time with an increasing rate starting in the 1950s but then decreasing rate starting in the 1970s.  
+**Figure 1 | Four plots showing grain yeild over time by crop.** Grain yeild is measured in bushels per acre. Barley, Corn and Oats look to have a linear low plateau for yield over time with  positive slope starting in the 1940s. Sorghum looks to have a linear piecewise relationship for yield over time with an increasing rate starting in the 1950s but then decreasing rate starting in the 1970s.  
 
 
 ## b. Statistical models to decribe Figure 1
@@ -87,9 +87,40 @@ fert_plot
 ```
 **Figure 2 | Three plots showing pounds of fertilizer over time by crop.** Fertilizer use is measured by pounds of fertilizer per acre and measured overt time. The limiting nutrients for for each crop is denoted by the maximum fertilizer use. For corn, Soybeans and Wheat the limiting nutrient is nitrogen, phosphate and nitrogen, respectively. 
 
-Fertilizer use (pounds acre$^{-1}$) for each crop seen in *figure 2* differ by crop. Corn and wheat show that nitrogen is the limiting nutrient while soybeans are limiting by potassium. Corn uses much more than soybeans and wheat for all types of fertilizer (exeption being potassium for soybeans). 
+## b. Differences in fertilizer use for each crop  
+Fertilizer use (pounds acre$^{-1}$) for each crop seen in *figure 2* differ by crop. Corn and wheat show that nitrogen is the limiting nutrient while soybeans are limited by potassium. Corn uses much more than soybeans and wheat for all types of fertilizer (exeption being potassium for soybeans). Wheat uses the least fertilizer with the one exeption of nitrogen use on soybeans.  
 
 
+
+# 3. Corn Yield and Fertilizer Use  
+## a. Plot of grain yield vs concentration of 
+```{r echo=FALSE, warning=FALSE, error=FALSE, fig.width=9}
+corn_yield = grain %>% 
+  filter(commodity == "Corn") %>% 
+  select(year, yield)
+
+corn_fert = fert %>% 
+  filter(crop == "Corn") %>% 
+  select(-crop) 
+
+corn = merge(corn_fert, corn_yield, all.x = T, by = "year")
+
+corn_plot = ggplot(data = corn, aes(x = ppa, y = yield)) +
+  geom_point(aes(colour = year), size=.5, ) +
+  scale_color_gradient(low="red", high="blue") +
+  facet_wrap(~fertilizer, scales = "free") +
+  theme_classic() +
+  xlab(TeX('Fertilizer Use (pounds acre$^{-1}$)')) +
+  ylab(TeX('Grain Yield (bushels $acre^{-1}$) ')) +
+  ggtitle("Grain Yield vs. Fertilizer Use") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+corn_plot
+``` 
+**Figure 3 | Three plots of Grain yield vs. fertilizer use by fertilizer and time.** Grain yeild is measured in bushels per acre. Fertilizer use is measured by pounds of fertilizer per acre. Grain yield looks to follow an exponential growth with an increase in nitrogen and potassium use. Phophate shows a different pattern. When too much fertilizer is used, yield goes down. 
+
+
+## b. Relationship between yield and fertilizer  
+Grain yield vs fertilizer use looks to follow a positive linear growth for nitrogen and potassium. Take nitrogen as an example; increasing fertilizer use by a factor of 2 increases grain yield by a factor of 2, approximately. For potassium, there is an approximately 1:2 positive relationship between fertilizer use and grain yield. Phosphate shows a different trend. Althought initially more fertilizer leads to increased yield, eventually too much fertilizer use leads to a decrease in yield. However-and this is a major citicisim of reading these plots at face value-drawing conclusions about positive linear relationships of fertilizer use and grain yield is naive as these plots show heteroscedastic results. Meaning, the variablility in grain yield is increasing as fertilizer use increases. Thus, the reader should impart skepticisim when interpreting these results. One critique might be the fertilizer "use" is not measuring the same actual use by farmer. To illustrated this point lets take an extreme example: If two farmers were to use the same amount of fertilizer but one had a cube of fertilizer that they placed in the middle of there farm whereas the other farmer spread out the same amount over their entire farm then obvioulsy the latter farmer will have higher yields. (sorry for the long response)
 
 
 
